@@ -1,12 +1,15 @@
+import {Component} from 'react';
 import { Messages } from '../Messages';
 
-const App = () => {
-    return (
-        <div id="test-id">
-            <h2>Hello from React</h2>
-            <Messages messages={['First', 'Second']} />
-        </div>
-    );
-};
+class App extends Component {
+    render() {
+        return (
+            <div id="chat">
+                <h2>Messages</h2>
+                <Messages/>
+            </div>
+        );
+    }
+}
 
 export { App };

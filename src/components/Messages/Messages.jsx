@@ -1,17 +1,46 @@
-const Messages = (props) => {
-    const { messages = [] } = props;
+import { Component, Fragment } from 'react';
+import { Message } from '../Message';
 
-    return (
-        <div className="messages">
-            {messages.map((item, index) => (
-                <Message key={index} text={item} />
-            ))}
-        </div>
-    );
-};
+class Messages extends Component {
+    state = {
+        name: 'user',
+        messages: [
+            {text: 'Hi'},
+            {text: 'How are you?'}
+        ],
+        answers: [
+            {name: 'bot', text: 'What?'},
+            {name: 'bot', text: 'Pong'}
+        ],
+    }
 
-const Message = (props) => {
-    return <div className="message">{props.text}</div>;
-};
+    componentDidUpdate() {
+        if (this.state.messages.length % 2) {
+
+            let answer = this.state.answers[ Math.floor(Math.random() * this.state.answers.length) ];
+
+            setTimeout(() => {
+                this.setState({ messages: [...this.state.messages, answer] });
+            }, 1000);
+        }
+    }
+
+    addMessage = () => {
+        this.setState({ messages: [...this.state.messages, {text: 'Ping'}] });
+    }
+
+    render() {
+        return (
+            <Fragment>
+            <div className="messages">
+                {this.state.messages.map((item, index) => (
+                    <Message key={index} text={item.text} name={item.name || this.state.name} />
+                ))}
+            </div>
+            <button onClick={this.addMessage}>Send Message</button>
+            </Fragment>
+        );
+    }
+}
 
 export { Messages };
