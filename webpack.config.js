@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
 module.exports = {
@@ -9,7 +10,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'static', 'build'),
         filename: 'bundle.js',
-        publicPath: '/static/build/',
+        // publicPath: '/static/build/',
     },
     module: {
         rules: [
@@ -35,4 +36,12 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx'],
     },
+    plugins: [
+        new HtmlWebpackPlugin({
+            title: 'React App',
+            filename: 'index.html',
+            template: 'src/index.html',
+        }),
+    ],
+    devtool: 'inline-source-map',
 };
