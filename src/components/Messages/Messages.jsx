@@ -3,10 +3,9 @@ import { Message } from '../Message';
 
 class Messages extends Component {
     state = {
-        name: 'user',
         messages: [
-            {text: 'Hi'},
-            {text: 'How are you?'}
+            {name: 'user', text: 'Hi'},
+            {name: 'user', text: 'How are you?'}
         ],
         answers: [
             {name: 'bot', text: 'What?'},
@@ -26,7 +25,7 @@ class Messages extends Component {
     }
 
     addMessage = () => {
-        this.setState({ messages: [...this.state.messages, {text: 'Ping'}] });
+        this.setState({ messages: [...this.state.messages, {name: 'user', text: 'Ping'}] });
     }
 
     render() {
@@ -34,7 +33,7 @@ class Messages extends Component {
             <Fragment>
             <div className="messages">
                 {this.state.messages.map((item, index) => (
-                    <Message key={index} text={item.text} name={item.name || this.state.name} />
+                    <Message key={index} {...item} />
                 ))}
             </div>
             <button onClick={this.addMessage}>Send Message</button>
