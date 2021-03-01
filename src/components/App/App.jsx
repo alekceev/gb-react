@@ -1,11 +1,8 @@
-import { Messages } from '../Messages';
+import { Layout } from '../Layout';
 
 const App = () => {
     return (
-        <div id="chat">
-            <h2>Messages</h2>
-            <Messages/>
-        </div>
+        <Layout/>
     );
 };
 
