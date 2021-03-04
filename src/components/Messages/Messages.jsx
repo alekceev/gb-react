@@ -1,15 +1,18 @@
 import { Component, Fragment, createRef } from 'react';
 import { Message } from '../Message';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
+import {TextField, Button, Icon} from '@material-ui/core';
+import { ThumbDownSharp } from '@material-ui/icons';
 
 class Messages extends Component {
     state = {
-        messages: [
-            {user: 'me', text: 'Hi'},
-            {user: 'bot', text: 'How are you?'}
-        ],
+        messages: {
+            0: [
+                {user: 'me', text: 'Hi'},
+                {user: 'bot', text: 'How are you?'}
+            ],
+            1: [],
+            2: []
+        },
         answers: [
             {user: 'bot', text: 'What?'},
             {user: 'bot', text: 'Pong'}
@@ -19,18 +22,27 @@ class Messages extends Component {
     messageRef = createRef();
 
     componentDidMount() {
-        this.messageRef.current.focus();
+        // this.messageRef.current.focus();
     }
 
     componentDidUpdate() {
-        if (this.state.messages[this.state.messages.length - 1].user  === 'me') {
+        for (let i = 0; i < this.props.chats.length; i++) {
+            if (!this.state.messages[i]) {
+                this.state.messages[i] = [];
+            }
+        }
+
+        const messages = this.state.messages[this.props.chatId] || []; 
+        if (messages.length && messages[messages.length - 1].user  === 'me') {
 
             let answer = this.state.answers[ Math.floor(Math.random() * this.state.answers.length) ];
 
             setTimeout(() => {
-                this.setState({ messages: [...this.state.messages, answer] });
+                this.setState({ messages: {...this.state.messages, [this.props.chatId]: [...messages, answer ]} });
             }, 1000);
         }
+
+        this.messageRef.current && this.messageRef.current.focus();
     }
 
     handleSubmit = (event) => {
@@ -40,8 +52,9 @@ class Messages extends Component {
 
     doFormSubmit = () => {
         const message = this.messageRef.current;
+        const {chatId} = this.props;
         if (message.value) {
-            this.setState({ messages: [...this.state.messages, {user: 'me', text: message.value}] });
+            this.setState({ messages: {...this.state.messages, [chatId]: [...this.state.messages[chatId], {user: 'me', text: message.value}] }});
             message.value = '';
             message.focus();
         }
@@ -55,22 +68,33 @@ class Messages extends Component {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, chatId, chats} = this.props;
+
+        if (!chatId || !this.state.messages[chatId]) {
+            return (<div></div>);
+        }
+
         return (
             <Fragment>
             <div className="messages">
-                {this.state.messages.map((item, index) => (
+                {this.state.messages[chatId].map((item, index) => (
                     <Message key={index} classes={classes} {...item} />
                 ))}
             </div>
             <form onSubmit={this.handleSubmit} className={classes.paper}>
-                <TextField onKeyDown={this.handleKeyDown} inputRef={this.messageRef} id="outlined-basic" variant="outlined" size="small" />
+                <TextField
+                    key={chatId}
+                    onKeyDown={this.handleKeyDown}
+                    inputRef={this.messageRef}
+                    id="outlined-basic"
+                    variant="outlined"
+                    size="small" />
                 <Button
                     type="submit"
                     variant="contained"
                     color="primary"
                     endIcon={<Icon>send</Icon>}
-                >Send</Button>
+                />
             </form>
             </Fragment>
         );

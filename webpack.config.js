@@ -11,6 +11,7 @@ module.exports = {
         path: path.resolve(__dirname, 'static', 'build'),
         filename: 'bundle.js',
         // publicPath: '/static/build/',
+        publicPath: '/',
     },
     module: {
         rules: [
@@ -54,4 +55,9 @@ module.exports = {
         }),
     ],
     devtool: 'inline-source-map',
+    devServer: {
+        port: 8080,
+        hot: true,
+        historyApiFallback: true,
+    },
 };

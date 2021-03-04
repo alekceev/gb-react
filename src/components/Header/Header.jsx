@@ -1,16 +1,23 @@
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import {Toolbar, AppBar, Button, Typography} from '@material-ui/core';
+import {Link} from 'react-router-dom';
 
 const Header = (props) => {
-    const { description = 'description', title = 'title', classes } = props;
+    const { classes, children } = props;
 
     return (
-        <Paper elevation={0} className={classes.header}>
-            <Typography variant="h6" gutterBottom>
-            {title}
-            </Typography>
-            <Typography>{description}</Typography>
-        </Paper>
+        <AppBar position="static">
+            <Toolbar>
+                <Typography className={classes.header} variant="h6">
+                    {children}
+                </Typography>
+                <Link to="/">
+                    <Button color="inherit">Home</Button>
+                </Link>
+                <Link to="/profile">
+                    <Button color="inherit">Profile</Button>
+                </Link>
+            </Toolbar>
+      </AppBar>
     );
 };
 

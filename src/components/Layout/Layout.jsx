@@ -1,57 +1,49 @@
 import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Container from '@material-ui/core/Container';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import { Header } from '../Header';
+import { withRouter } from 'react-router';
+import { Grid } from '@material-ui/core';
 import { ChatList } from '../ChatList';
 import { Messages } from '../Messages';
+import { withStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
-        overflow: 'hidden',
-        padding: theme.spacing(0, 3),
-    },
+const styles = (theme) => ({
     paper: {
         maxWidth: 400,
         margin: `${theme.spacing(1)}px auto`,
         padding: theme.spacing(2),
     },
-    chatList: {
-        width: '100%',
-        maxWidth: 360,
-        backgroundColor: theme.palette.background.paper,
-    },
     header: {
-        padding: theme.spacing(2),
-        backgroundColor: theme.palette.grey[200],
+        // padding: theme.spacing(2),
+        // backgroundColor: theme.palette.grey[200],
+        flexGrow: 1,
+        color: "inherit"
     }
-  }));
+});
 
-const Layout = () => {
-    const classes = useStyles();
+//const _Layout = (props) => {
+class _Layout extends React.Component {
+    state = {
+        chats: ['Chat 1', 'Chat 2', 'Chat 3'],
+    };
 
-    return (
-        <React.Fragment>
-            <CssBaseline />
-                <Container maxWidth="md">
-                    <div className={classes.root}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <Header classes={classes}/>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <ChatList classes={classes}/>
-                            </Grid>
-                            <Grid item xs={9}>
-                                <Messages classes={classes}/>
-                            </Grid>
-                      </Grid>
-                    </div>
-            </Container>
-        </React.Fragment>
-    );
+    addNewChat = (name) => {
+        this.setState({ chats: [...this.state.chats, name] });
+    }
+
+    render() {
+        const { classes = {}, match } = this.props;
+
+        return (
+            <React.Fragment>
+                <Grid item xs={3}>
+                    <ChatList classes={classes} chats={this.state.chats} addNewChat={this.addNewChat}/>
+                </Grid>
+                <Grid item xs={9}>
+                    <Messages classes={classes} chatId={match.params.id} chats={this.state.chats}/>
+                </Grid>
+            </React.Fragment>
+        );
+    }
 };
+const Layout = withStyles(styles)( withRouter(_Layout) );
 
 export { Layout };
