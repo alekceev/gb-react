@@ -17,22 +17,22 @@ class Messages extends Component {
             {user: 'bot', text: 'What?'},
             {user: 'bot', text: 'Pong'}
         ],
+        textMessage: '',
     }
 
     messageRef = createRef();
+    messagesRef = createRef();
 
     componentDidMount() {
         // this.messageRef.current.focus();
     }
 
     componentDidUpdate() {
-        for (let i = 0; i < this.props.chats.length; i++) {
-            if (!this.state.messages[i]) {
-                this.state.messages[i] = [];
-            }
+        if (!this.state.messages[this.props.chatId]) {
+            this.state.messages[this.props.chatId] = [];
         }
 
-        const messages = this.state.messages[this.props.chatId] || []; 
+        const messages = this.state.messages[this.props.chatId];
         if (messages.length && messages[messages.length - 1].user  === 'me') {
 
             let answer = this.state.answers[ Math.floor(Math.random() * this.state.answers.length) ];
@@ -43,6 +43,7 @@ class Messages extends Component {
         }
 
         this.messageRef.current && this.messageRef.current.focus();
+        this.messagesRef.current.scrollTop = this.messagesRef.current.scrollHeight;
     }
 
     handleSubmit = (event) => {
@@ -53,10 +54,21 @@ class Messages extends Component {
     doFormSubmit = () => {
         const message = this.messageRef.current;
         const {chatId} = this.props;
-        if (message.value) {
-            this.setState({ messages: {...this.state.messages, [chatId]: [...this.state.messages[chatId], {user: 'me', text: message.value}] }});
-            message.value = '';
-            message.focus();
+
+        if (this.state.textMessage.length) {
+            this.setState({
+                messages: {
+                    ...this.state.messages,
+                    [chatId]: [
+                        ...this.state.messages[chatId],
+                        {
+                            user: 'me',
+                            text: this.state.textMessage
+                        },
+                    ],
+                },
+                textMessage: '',
+            });
         }
     }
 
@@ -71,12 +83,12 @@ class Messages extends Component {
         const {classes, chatId, chats} = this.props;
 
         if (!chatId || !this.state.messages[chatId]) {
-            return (<div></div>);
+            return (<div/>);
         }
 
         return (
             <Fragment>
-            <div className="messages">
+            <div className="messages" ref={this.messagesRef}>
                 {this.state.messages[chatId].map((item, index) => (
                     <Message key={index} classes={classes} {...item} />
                 ))}
@@ -86,6 +98,12 @@ class Messages extends Component {
                     key={chatId}
                     onKeyDown={this.handleKeyDown}
                     inputRef={this.messageRef}
+                    value={this.state.textMessage}
+                    onChange={(event) =>
+                        this.setState({
+                            textMessage: event.target.value,
+                        })
+                    }
                     id="outlined-basic"
                     variant="outlined"
                     size="small" />
