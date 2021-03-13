@@ -4,6 +4,7 @@ import { Grid } from '@material-ui/core';
 import { ChatList } from '../ChatList';
 import { Messages } from '../Messages';
 import { withStyles } from "@material-ui/core/styles";
+import { compose } from 'redux';
 
 const styles = (theme) => ({
     paper: {
@@ -19,15 +20,7 @@ const styles = (theme) => ({
     }
 });
 
-//const _Layout = (props) => {
 class _Layout extends React.Component {
-    state = {
-        chats: ['Chat 1', 'Chat 2', 'Chat 3'],
-    };
-
-    addNewChat = (name) => {
-        this.setState({ chats: [...this.state.chats, name] });
-    }
 
     render() {
         const { classes = {}, match } = this.props;
@@ -35,15 +28,19 @@ class _Layout extends React.Component {
         return (
             <React.Fragment>
                 <Grid item xs={3}>
-                    <ChatList classes={classes} chats={this.state.chats} addNewChat={this.addNewChat}/>
+                    <ChatList classes={classes} chatId={match.params.id}/>
                 </Grid>
                 <Grid item xs={9}>
-                    <Messages classes={classes} chatId={match.params.id} chats={this.state.chats}/>
+                    <Messages classes={classes} chatId={match.params.id}/>
                 </Grid>
             </React.Fragment>
         );
     }
 };
-const Layout = withStyles(styles)( withRouter(_Layout) );
+
+const Layout = compose(
+    withRouter,
+    withStyles(styles),
+)(_Layout);
 
 export { Layout };

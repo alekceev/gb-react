@@ -1,4 +1,4 @@
-import {SEND_MESSAGE, ADD_NEW_CHAT} from '../actions/messageActions';
+import {SEND_MESSAGE} from '../actions/messageActions';
 
 const initialState = {};
 
@@ -17,12 +17,6 @@ export const chatReducer = (state = initialState, action) => {
                         },
                     ],
                 },
-            }
-        }
-        case ADD_NEW_CHAT: {
-            return {
-                ...state,
-                //TODO
             }
         }
         default:

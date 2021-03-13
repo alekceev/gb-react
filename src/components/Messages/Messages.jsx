@@ -3,8 +3,6 @@ import { Message } from '../Message';
 import {TextField, Button, Icon} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-// import {bindActionCreators} from 'redux';
-// import { ThumbDownSharp } from '@material-ui/icons';
 import {sendMessage} from '../../redux/actions/messageActions';
 
 class _Messages extends Component {
@@ -12,7 +10,6 @@ class _Messages extends Component {
         chatId: PropTypes.string,
         messages: PropTypes.object.isRequired,
         sendMessage: PropTypes.func.isRequired,
-
     };
 
     state = {
@@ -31,17 +28,14 @@ class _Messages extends Component {
     }
 
     componentDidUpdate() {
-        // if (!this.props.messages[this.props.chatId]) {
-        //     this.props.messages[this.props.chatId] = [];
-        // }
-
-        const messages = this.props.messages[this.props.chatId] || [];
+        const {chatId} = this.props;
+        const messages = this.props.messages[chatId] || [];
         if (messages.length && messages[messages.length - 1].user  === 'me') {
 
             let answer = this.state.answers[ Math.floor(Math.random() * this.state.answers.length) ];
 
             setTimeout(() => {
-                this.doFormSubmit(answer.text, answer.user);
+                this.doFormSubmit(answer.text, answer.user, chatId);
             }, 1000);
         }
 
@@ -56,12 +50,11 @@ class _Messages extends Component {
         this.doFormSubmit();
     }
 
-    doFormSubmit = (msg = '', user = '') => {
-        const message = this.messageRef.current;
-        const {chatId} = this.props;
+    doFormSubmit = (msg = '', user = '', toChatId) => {
+        const {chatId, sendMessage} = this.props;
 
         if (msg.length || this.state.textMessage.length) {
-            this.props.sendMessage( msg || this.state.textMessage, user || 'me', chatId );
+            sendMessage( msg || this.state.textMessage, user || 'me', toChatId || chatId );
             this.setState({
                 textMessage: '',
             });
@@ -76,7 +69,7 @@ class _Messages extends Component {
     }
 
     render() {
-        console.log('props', this.props);
+        // console.log('props', this.props);
         const {classes, messages = {}, chatId, chats} = this.props;
 
         if (!chatId) {
@@ -122,8 +115,6 @@ const mapStateToProps = (state) => ({
     messages: state.chat.messages,
 });
 
-// const mapDispatchToProps = (dispatch) => bindActionCreators({sendMessage}, dispatch);
-// const Messages = connect(mapStateToProps, mapDispatchToProps)(_Messages);
 const Messages = connect(mapStateToProps, {sendMessage})(_Messages);
 
 export { Messages };

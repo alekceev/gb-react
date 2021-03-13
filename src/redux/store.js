@@ -9,6 +9,10 @@ const initialState = {
                 user: 'bot',
             }]
         }
+    },
+    chats: ['Chat 1', 'Chat 2', 'Chat 3'],
+    profile: {
+        name: 'me',
     }
 };
 
