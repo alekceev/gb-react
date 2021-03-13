@@ -10,12 +10,13 @@ const styles = (theme) => ({
         flexGrow: 1,
         overflow: 'hidden',
         padding: theme.spacing(0, 3),
+        height: '720px',
     },
     header: {
         // padding: theme.spacing(2),
         // backgroundColor: theme.palette.grey[200],
         flexGrow: 1,
-        color: "inherit"
+        color: "inherit",
     }
   });
 
