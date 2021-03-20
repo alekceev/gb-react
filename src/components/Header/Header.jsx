@@ -48,10 +48,10 @@ class _Header extends React.Component {
                         {profile.name}
                     </Typography>
                     <Link to="/">
-                        <Button color="inherit">Home</Button>
+                        <Button className={classes.menu}>Home</Button>
                     </Link>
                     <Link to="/profile">
-                        <Button color="inherit">Profile</Button>
+                        <Button className={classes.menu}>Profile</Button>
                     </Link>
                 </Toolbar>
         </AppBar>

@@ -17,6 +17,9 @@ const styles = (theme) => ({
         // backgroundColor: theme.palette.grey[200],
         flexGrow: 1,
         color: "inherit",
+    },
+    menu: {
+        color: 'white',
     }
   });
 

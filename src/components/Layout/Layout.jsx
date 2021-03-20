@@ -14,12 +14,7 @@ const styles = (theme) => ({
         margin: `${theme.spacing(1)}px auto`,
         padding: theme.spacing(2),
     },
-    header: {
-        padding: theme.spacing(2),
-        // backgroundColor: theme.palette.grey[200],
-        flexGrow: 1,
-        color: "inherit",
-    },
+    header: {},
     messages: {
         height: '540px',
         overflowY: 'auto',
