@@ -4,19 +4,18 @@ import {TextField, Button, Icon} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {sendMessage} from '../../redux/actions/messageActions';
+import {setUnreaded} from '../../redux/actions/chatlistActions';
 
 class _Messages extends Component {
     static propTypes = {
+        classes: PropTypes.object.isRequired,
         chatId: PropTypes.string,
         messages: PropTypes.object.isRequired,
         sendMessage: PropTypes.func.isRequired,
+        chats: PropTypes.object.isRequired,
     };
 
     state = {
-        answers: [
-            {user: 'bot', text: 'What?'},
-            {user: 'bot', text: 'Pong'}
-        ],
         textMessage: '',
     }
 
@@ -28,15 +27,10 @@ class _Messages extends Component {
     }
 
     componentDidUpdate() {
-        const {chatId} = this.props;
-        const messages = this.props.messages[chatId] || [];
-        if (messages.length && messages[messages.length - 1].user  === 'me') {
-
-            let answer = this.state.answers[ Math.floor(Math.random() * this.state.answers.length) ];
-
-            setTimeout(() => {
-                this.doFormSubmit(answer.text, answer.user, chatId);
-            }, 1000);
+        const {chatId, chats} = this.props;
+        if (chatId && chats[chatId].unreaded) {
+            // при обновлении списка сообщений вызовим событие отметить об их прочтении
+            this.props.setUnreaded(chatId, 0);
         }
 
         this.messageRef.current && this.messageRef.current.focus();
@@ -80,12 +74,12 @@ class _Messages extends Component {
 
         return (
             <Fragment>
-            <div className="messages" ref={this.messagesRef}>
+            <div className={classes.messages} ref={this.messagesRef}>
                 {messages[chatId].map((item, index) => (
                     <Message key={index} classes={classes} {...item} />
                 ))}
             </div>
-            <form onSubmit={this.handleSubmit} className={classes.paper}>
+            <form onSubmit={this.handleSubmit} className={classes.newMessage}>
                 <TextField
                     key={chatId}
                     onKeyDown={this.handleKeyDown}
@@ -113,8 +107,9 @@ class _Messages extends Component {
 
 const mapStateToProps = (state) => ({
     messages: state.chat.messages,
+    chats: state.chats,
 });
 
-const Messages = connect(mapStateToProps, {sendMessage})(_Messages);
+const Messages = connect(mapStateToProps, {sendMessage, setUnreaded})(_Messages);
 
 export { Messages };
