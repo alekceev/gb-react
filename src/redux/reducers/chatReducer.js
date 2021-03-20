@@ -1,3 +1,4 @@
+import {omit} from 'lodash';
 import {DEL_MESSAGES, SEND_MESSAGE} from '../actions/messageActions';
 
 const initialState = {};
@@ -21,8 +22,10 @@ export const chatReducer = (state = initialState, action) => {
         }
 
         case DEL_MESSAGES: {
-            delete state.messages[action.payload.chatId];
-            return {...state};
+            return {
+                ...state,
+                messages: omit(state.messages, [action.payload.chatId])
+            };
         }
 
         default:

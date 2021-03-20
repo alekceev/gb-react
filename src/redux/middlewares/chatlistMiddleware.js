@@ -8,7 +8,6 @@ export const unreadMiddleware = (store) => (next) => (action) => {
                 const state = store.getState();
                 const {chatId} = action.payload;
 
-                // TODO понять как лучше вытянуть id чата
                 let paths = state.router.location.pathname.split('/');
                 let id = parseInt( paths[paths.length-1] );
                 // другой чат, увеличим счётчик непрочитанных
@@ -28,7 +27,6 @@ export const unreadMiddleware = (store) => (next) => (action) => {
 export const delChatMiddleware = (store) => (next) => (action) => {
     switch(action.type) {
         case DEL_CHAT: {
-            const {chatId} = action.payload;
             // словили удаление чата и стразу инициируем событие на удаление сообщений
             store.dispatch(
                 delMessages(action.payload.chatId)

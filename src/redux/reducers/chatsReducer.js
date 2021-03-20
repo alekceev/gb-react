@@ -1,3 +1,4 @@
+import {omit} from 'lodash';
 import {ADD_NEW_CHAT, DEL_CHAT, SET_UNREADED} from '../actions/chatlistActions';
 
 const initialState = {};
@@ -42,9 +43,7 @@ export const chatsReducer = (state = initialState, action) => {
             const { chatId } = action.payload;
             // просо стираем инфу о чате из chats,
             // а удаление из сообщений повесим на middleware
-            delete state[chatId];
-
-            return {...state};
+            return omit(state, [chatId]);
         }
 
         default:
