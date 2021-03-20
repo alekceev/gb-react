@@ -1,18 +1,18 @@
 import { Component, Fragment, createRef } from 'react';
 import { Message } from '../Message';
 import {TextField, Button, Icon} from '@material-ui/core';
-import { ThumbDownSharp } from '@material-ui/icons';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {sendMessage} from '../../redux/actions/messageActions';
 
-class Messages extends Component {
+class _Messages extends Component {
+    static propTypes = {
+        chatId: PropTypes.string,
+        messages: PropTypes.object.isRequired,
+        sendMessage: PropTypes.func.isRequired,
+    };
+
     state = {
-        messages: {
-            0: [
-                {user: 'me', text: 'Hi'},
-                {user: 'bot', text: 'How are you?'}
-            ],
-            1: [],
-            2: []
-        },
         answers: [
             {user: 'bot', text: 'What?'},
             {user: 'bot', text: 'Pong'}
@@ -28,22 +28,21 @@ class Messages extends Component {
     }
 
     componentDidUpdate() {
-        if (!this.state.messages[this.props.chatId]) {
-            this.state.messages[this.props.chatId] = [];
-        }
-
-        const messages = this.state.messages[this.props.chatId];
+        const {chatId} = this.props;
+        const messages = this.props.messages[chatId] || [];
         if (messages.length && messages[messages.length - 1].user  === 'me') {
 
             let answer = this.state.answers[ Math.floor(Math.random() * this.state.answers.length) ];
 
             setTimeout(() => {
-                this.setState({ messages: {...this.state.messages, [this.props.chatId]: [...messages, answer ]} });
+                this.doFormSubmit(answer.text, answer.user, chatId);
             }, 1000);
         }
 
         this.messageRef.current && this.messageRef.current.focus();
-        this.messagesRef.current.scrollTop = this.messagesRef.current.scrollHeight;
+        if (this.messagesRef.current) {
+            this.messagesRef.current.scrollTop = this.messagesRef.current.scrollHeight;
+        }
     }
 
     handleSubmit = (event) => {
@@ -51,22 +50,12 @@ class Messages extends Component {
         this.doFormSubmit();
     }
 
-    doFormSubmit = () => {
-        const message = this.messageRef.current;
-        const {chatId} = this.props;
+    doFormSubmit = (msg = '', user = '', toChatId) => {
+        const {chatId, sendMessage} = this.props;
 
-        if (this.state.textMessage.length) {
+        if (msg.length || this.state.textMessage.length) {
+            sendMessage( msg || this.state.textMessage, user || 'me', toChatId || chatId );
             this.setState({
-                messages: {
-                    ...this.state.messages,
-                    [chatId]: [
-                        ...this.state.messages[chatId],
-                        {
-                            user: 'me',
-                            text: this.state.textMessage
-                        },
-                    ],
-                },
                 textMessage: '',
             });
         }
@@ -80,16 +69,19 @@ class Messages extends Component {
     }
 
     render() {
-        const {classes, chatId, chats} = this.props;
+        // console.log('props', this.props);
+        const {classes, messages = {}, chatId, chats} = this.props;
 
-        if (!chatId || !this.state.messages[chatId]) {
+        if (!chatId) {
             return (<div/>);
+        } else {
+            messages[chatId] ||= [];
         }
 
         return (
             <Fragment>
             <div className="messages" ref={this.messagesRef}>
-                {this.state.messages[chatId].map((item, index) => (
+                {messages[chatId].map((item, index) => (
                     <Message key={index} classes={classes} {...item} />
                 ))}
             </div>
@@ -118,5 +110,11 @@ class Messages extends Component {
         );
     }
 }
+
+const mapStateToProps = (state) => ({
+    messages: state.chat.messages,
+});
+
+const Messages = connect(mapStateToProps, {sendMessage})(_Messages);
 
 export { Messages };

@@ -1,24 +1,45 @@
 import React from 'react';
-import {List, ListItemText, TextField, Button, Icon} from '@material-ui/core';
+import { List, ListItemText, TextField, Button, Icon } from '@material-ui/core';
 import ListItem from '@material-ui/core/ListItem';
-import { withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+
+import { addNewChat } from '../../redux/actions/chatlistActions';
 
 const styles = (theme) => ({
+    header: {
+
+    },
+    paper: {
+
+    },
     chatList: {
         width: '100%',
         maxWidth: 360,
         backgroundColor: theme.palette.background.paper,
         align: 'left',
+        "& .active": {
+            color: 'darkred',
+            fontWeight: 500,
+        }
     },
-    paper: {
-        maxWidth: 400,
+    form: {
+        maxWidth: 360,
+        width: '100%',
         margin: `${theme.spacing(1)}px auto`,
         padding: theme.spacing(2),
     },
 });
 
 class _ChatList extends React.Component {
+    static propTypes = {
+        chats: PropTypes.array.isRequired,
+        addNewChat: PropTypes.func.isRequired,
+        classes: PropTypes.object,
+    };
 
     newChatRef = React.createRef();
 
@@ -36,7 +57,6 @@ class _ChatList extends React.Component {
     doFormSubmit = () => {
         const { chats, addNewChat } = this.props;
         const newChat = this.newChatRef.current;
-        console.log(chats);
         if (newChat.value) {
             addNewChat(newChat.value);
             newChat.value = '';
@@ -56,7 +76,7 @@ class _ChatList extends React.Component {
                         </NavLink>
                     ))}
                 </List>
-                <form onSubmit={this.handleSubmit} className={classes.paper}>
+                <form onSubmit={this.handleSubmit} className={classes.form}>
                     <TextField
                         onKeyDown={this.handleKeyDown}
                         inputRef={this.newChatRef}
@@ -74,7 +94,13 @@ class _ChatList extends React.Component {
     }
 }
 
-const ChatList = withStyles(styles)(_ChatList);
+const mapStateToProps = (state) => ({
+    chats: state.chats,
+});
 
+const ChatList = compose(
+    connect(mapStateToProps, {addNewChat}),
+    withStyles(styles)
+)(_ChatList);
 
 export { ChatList };
