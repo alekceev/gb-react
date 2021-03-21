@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-import { addNewChat } from '../../redux/actions/chatlistActions';
+import { addNewChat, loadChats } from '../../redux/actions/chatlistActions';
 
 class _ChatList extends React.Component {
     static propTypes = {
@@ -13,6 +13,10 @@ class _ChatList extends React.Component {
         addNewChat: PropTypes.func.isRequired,
         classes: PropTypes.object,
     };
+
+    componentDidMount() {
+        this.props.loadChats();
+    }
 
     newChatRef = React.createRef();
 
@@ -77,7 +81,7 @@ const mapStateToProps = (state) => ({
 });
 
 const ChatList = compose(
-    connect(mapStateToProps, {addNewChat}),
+    connect(mapStateToProps, {addNewChat, loadChats}),
 )(_ChatList);
 
 export { ChatList };

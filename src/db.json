@@ -1,0 +1,49 @@
+{
+  "messages": [
+    {
+      "id": 1,
+      "chatId": 1,
+      "text": "Hello from redux, enter command:",
+      "user": "bot"
+    },
+    {
+      "id": 2,
+      "chatId": 2,
+      "text": "Hello from redux, enter command:",
+      "user": "bot"
+    },
+    {
+      "id": 3,
+      "chatId": 1,
+      "text": "Enter command:",
+      "user": "bot"
+    },
+    {
+      "text": "test",
+      "user": "me",
+      "chatId": "2",
+      "id": 4
+    },
+    {
+      "text": "Error command",
+      "user": "bot",
+      "chatId": "2",
+      "id": 5
+    }
+  ],
+  "chats": [
+    {
+      "id": 1,
+      "name": "Chat 1"
+    },
+    {
+      "id": 2,
+      "name": "Chat 2",
+      "unreaded": 1
+    }
+  ],
+  "profile": {
+    "name": "User",
+    "agree": false
+  }
+}

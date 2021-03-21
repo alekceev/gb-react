@@ -1,4 +1,4 @@
-import {PROFILE_NAME} from '../actions/profileActions';
+import {PROFILE_NAME, SUCCESS_PROFILE_LOADING} from '../actions/profileActions';
 
 const initialState = {};
 
@@ -10,6 +10,12 @@ export const profileReducer = (state = initialState, action) => {
                 name: action.payload.name
             }
         }
+
+        case SUCCESS_PROFILE_LOADING: {
+            // console.log('PROFILE LOADING:', action.payload);
+            return action.payload;
+        }
+
         default:
             return state;
     }

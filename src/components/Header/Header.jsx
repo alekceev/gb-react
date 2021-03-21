@@ -1,16 +1,24 @@
-import {Toolbar, AppBar, Button, Typography, Box} from '@material-ui/core';
-import {Link} from 'react-router-dom';
+import { Toolbar, AppBar, Button, Typography, Box } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
-import {delChat} from '../../redux/actions/chatlistActions';
+import { delChat } from '../../redux/actions/chatlistActions';
+import { loadProfile } from '../../redux/actions/profileActions';
 
 class _Header extends React.Component {
     static propTypes = {
         profile: PropTypes.object.isRequired,
         classes: PropTypes.object,
     };
+
+    componentDidMount() {
+        // загрузка профиля, если имя не задано
+        if (!("name" in this.props.profile) || this.props.profile.name.length === 0) {
+            this.props.loadProfile();
+        }
+    }
 
     handleDelChat = (event) => {
         // удаляем чат
@@ -65,6 +73,6 @@ const mapStateToProps = (state) => ({
     router: state.router,
 });
 
-const Header = connect(mapStateToProps, {delChat, push})(_Header);
+const Header = connect(mapStateToProps, {delChat, push, loadProfile})(_Header);
 
 export { Header };

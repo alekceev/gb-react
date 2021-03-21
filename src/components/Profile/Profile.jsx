@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 
-import { setName } from '../../redux/actions/profileActions';
+import { setName, loadProfile } from '../../redux/actions/profileActions';
 
 const styles = (theme) => ({
     root: {
@@ -28,6 +28,10 @@ class _Profile extends React.Component {
         setName: PropTypes.func.isRequired,
         classes: PropTypes.object,
     };
+
+    componentDidMount() {
+        this.props.loadProfile();
+    }
 
     userNameRef = React.createRef();
 
@@ -90,7 +94,7 @@ const mapStateToProps = (state) => ({
 
 const Profile = compose(
     withStyles(styles),
-    connect(mapStateToProps, {setName})
+    connect(mapStateToProps, {setName, loadProfile})
 )(_Profile);
 
 export { Profile };

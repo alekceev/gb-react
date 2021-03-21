@@ -11,31 +11,16 @@ import middlewares from './middlewares';
 
 const initialState = {
     chat: {
-        messages: {
-            1: [{
-                text: 'Hello from redux, enter command:',
-                user: 'bot',
-            }],
-            2: [{
-                text: 'Hello from redux, enter command:',
-                user: 'bot',
-            }]
-        },
+        isLoading: false,
+        messages: {},
     },
-    chats: {
-        1 : { name: 'Chat 1'},
-        2 : { name: 'Chat 2', unreaded: 1},
-    },
-    profile: {
-        name: 'me',
-    }
 };
 
 const persistConfig = {
     key: 'root',
     storage,
     stateReconciler: autoMergeLevel2,
-    whitelist: ['chat', 'chats', 'profile'],
+    whitelist: [],//['chat', 'chats', 'profile'],
 };
 
 export const history = createBrowserHistory();
