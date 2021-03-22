@@ -1,0 +1,1 @@
+export { InstallPopup } from './InstallPopup';

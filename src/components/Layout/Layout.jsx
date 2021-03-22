@@ -16,7 +16,7 @@ const styles = (theme) => ({
     },
     header: {},
     messages: {
-        height: '540px',
+        height: '500px',
         overflowY: 'auto',
         alignItems: 'flex-end',
     },
@@ -32,7 +32,7 @@ const styles = (theme) => ({
         // justifyContent: 'space-between',
         backgroundColor: '#bebebe',
         // overflowY: 'auto',
-        height: '540px',
+        height: '500px',
         "& .active": {
             color: 'darkred',
             fontWeight: 500,

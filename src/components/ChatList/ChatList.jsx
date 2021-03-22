@@ -48,7 +48,7 @@ class _ChatList extends React.Component {
                     {Object.keys(chats).map((id, index) => (
                         <NavLink key={index} to={`/chat/${id}`} activeClassName="active">
                             <ListItem button>
-                                <ListItemText inset primary={chats[id].name} />
+                                <ListItemText primary={chats[id].name} />
                                 {chats[id].unreaded > 0 &&
                                     <Box component="sup" display="inline">
                                         {chats[id].unreaded}
@@ -69,6 +69,7 @@ class _ChatList extends React.Component {
                         variant="contained"
                         color="primary"
                         endIcon={<Icon>send</Icon>}
+                        size="small"
                     />
                 </form>
             </>

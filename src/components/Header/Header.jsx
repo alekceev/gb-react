@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import { delChat } from '../../redux/actions/chatlistActions';
 import { loadProfile } from '../../redux/actions/profileActions';
+import { PushToggle } from '../PushToggle';
 
 class _Header extends React.Component {
     static propTypes = {
@@ -38,6 +39,7 @@ class _Header extends React.Component {
         return (
             <AppBar position="static">
                 <Toolbar>
+                    <PushToggle />
                     <Typography className={classes.header} variant="h6">
                         {currentChat && 
                             <>
