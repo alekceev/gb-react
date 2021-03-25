@@ -1,5 +1,8 @@
 import {omit} from 'lodash';
-import {DEL_MESSAGES, SEND_MESSAGE} from '../actions/messageActions';
+import {
+    DEL_MESSAGES, SEND_MESSAGE, DEL_MESSAGE,
+    START_MESSAGES_LOADING, SUCCESS_MESSAGES_LOADING, ERROR_MESSAGES_LOADING,
+} from '../actions/messageActions';
 
 const initialState = {};
 
@@ -13,10 +16,26 @@ export const chatReducer = (state = initialState, action) => {
                     [action.payload.chatId]: [
                         ...state.messages[action.payload.chatId] || [],
                         {
-                            user: action.payload.user,
-                            text: action.payload.text,
+                            ...action.payload
                         },
                     ],
+                },
+            }
+        }
+
+        case DEL_MESSAGE: {
+            let messages = [];
+            state.messages[action.payload.chatId].forEach(m => {
+                if (m.id != action.payload.id) {
+                    messages.push(m);
+                }
+            });
+
+            return {
+                ...state,
+                messages: {
+                    ...state.messages,
+                    [action.payload.chatId]: messages,
                 },
             }
         }
@@ -25,6 +44,29 @@ export const chatReducer = (state = initialState, action) => {
             return {
                 ...state,
                 messages: omit(state.messages, [action.payload.chatId])
+            };
+        }
+
+        case START_MESSAGES_LOADING: {
+            return {
+                ...state,
+                isLoading: true,
+            };
+        }
+
+        case ERROR_MESSAGES_LOADING: {
+            return {
+                ...state,
+                isLoading: false,
+            };
+        }
+
+        case SUCCESS_MESSAGES_LOADING: {
+            // console.log('LOADING:', action.payload);
+            return {
+                ...state,
+                isLoading: false,
+                messages: action.payload,
             };
         }
 

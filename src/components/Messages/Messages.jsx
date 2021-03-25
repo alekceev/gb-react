@@ -1,9 +1,9 @@
 import { Component, Fragment, createRef } from 'react';
 import { Message } from '../Message';
-import {TextField, Button, Icon} from '@material-ui/core';
+import {TextField, Button, Icon, CircularProgress} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {sendMessage} from '../../redux/actions/messageActions';
+import {sendMessage, loadMessages} from '../../redux/actions/messageActions';
 import {setUnreaded} from '../../redux/actions/chatlistActions';
 
 class _Messages extends Component {
@@ -13,6 +13,8 @@ class _Messages extends Component {
         messages: PropTypes.object.isRequired,
         sendMessage: PropTypes.func.isRequired,
         chats: PropTypes.object.isRequired,
+        isLoading: PropTypes.bool.isRequired,
+        loadMessages: PropTypes.func.isRequired,
     };
 
     state = {
@@ -24,11 +26,15 @@ class _Messages extends Component {
 
     componentDidMount() {
         // this.messageRef.current.focus();
+        // if (this.props.chatId) {
+        //     this.props.loadMessages(this.props.chatId);
+        // }
+        this.props.loadMessages();
     }
 
     componentDidUpdate() {
         const {chatId, chats} = this.props;
-        if (chatId && chats[chatId].unreaded) {
+        if (chatId && chats[chatId] && chats[chatId].unreaded) {
             // при обновлении списка сообщений вызовим событие отметить об их прочтении
             this.props.setUnreaded(chatId, 0);
         }
@@ -64,10 +70,12 @@ class _Messages extends Component {
 
     render() {
         // console.log('props', this.props);
-        const {classes, messages = {}, chatId, chats} = this.props;
+        const {classes, messages = {}, chatId, isLoading = false} = this.props;
 
         if (!chatId) {
             return (<div/>);
+        } else if (isLoading) {
+            return <CircularProgress/>;
         } else {
             messages[chatId] ||= [];
         }
@@ -107,9 +115,10 @@ class _Messages extends Component {
 
 const mapStateToProps = (state) => ({
     messages: state.chat.messages,
+    isLoading: state.chat.isLoading,
     chats: state.chats,
 });
 
-const Messages = connect(mapStateToProps, {sendMessage, setUnreaded})(_Messages);
+const Messages = connect(mapStateToProps, {sendMessage, setUnreaded, loadMessages})(_Messages);
 
 export { Messages };
