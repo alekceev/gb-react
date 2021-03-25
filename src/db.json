@@ -23,12 +23,6 @@
       "user": "me",
       "chatId": "2",
       "id": 4
-    },
-    {
-      "text": "Error command",
-      "user": "bot",
-      "chatId": "2",
-      "id": 5
     }
   ],
   "chats": [

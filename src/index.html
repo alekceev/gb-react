@@ -6,10 +6,26 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta name="theme-color" content="#fffff">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/images/chat-app-192-192.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 </head>
 <body>
     <div id="root"></div>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            document.addEventListener('DOMContentLoaded', () => {
+                navigator.serviceWorker.register('/sw.js').then(
+                    (reg) => console.log(`SeviceWorker registered ${reg}`)
+                ).catch(console.error);
+            })
+        } else {
+            console.log('ServiceWorker not supported')
+        }
+    </script>
+    <script src="./notifications.js"></script>
 </body>
 </html>

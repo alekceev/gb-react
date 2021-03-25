@@ -4,13 +4,14 @@ import { CssBaseline, Container, Grid } from '@material-ui/core';
 import { withStyles } from "@material-ui/core/styles";
 import { Router } from '../Router';
 import { Header } from '../Header';
+import { InstallPopup } from '../InstallPopup';
 
 const styles = (theme) => ({
     root: {
         flexGrow: 1,
         overflow: 'hidden',
-        padding: theme.spacing(0, 3),
-        height: '720px',
+        padding: theme.spacing(0, 1),
+        height: '730px',
     },
     header: {
         // padding: theme.spacing(2),
@@ -38,6 +39,7 @@ const styles = (theme) => ({
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <Header classes={classes}/>
+                                <InstallPopup/>
                             </Grid>
                             <Router/>
                         </Grid>
